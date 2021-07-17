@@ -1,0 +1,22 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #3c98c2;
+    
+    .logo-app {
+        font-size: 25px;
+        font-weight: bold;
+        color: whitesmoke;
+        margin: 0;
+    }
+
+    .menu-item {
+        font-size: 18px;
+        color: whitesmoke;
+        text-decoration: underline;
+        cursor: pointer;
+        margin: 0;
+    }
+}
