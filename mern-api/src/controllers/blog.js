@@ -47,11 +47,26 @@ exports.createBlogPost = (req, res, next) => {
 }
 
 exports.getAllPosts = (req, res, next) => {
+    const currentPage = req.query.page || 1;
+    const perPage = req.query.perPage || 5;
+    let totalPosts;
+
+    // Pagination
     BlogPost.find()
+    .countDocuments()
+    .then(count => {
+        totalPosts = count
+        return BlogPost.find()
+        .skip((parseInt(currentPage) - 1) * parseInt(perPage))
+        .limit(parseInt(perPage));
+    })
     .then(result => {
         res.status(200).json({
             message: 'Data Find it',
-            data: result
+            data: result, 
+            total_data: totalPosts,
+            per_page: parseInt(perPage),
+            current_page: parseInt(currentPage),
         })
     })
     .catch(err => {
