@@ -8,7 +8,7 @@ const Login = () => {
     return (
         <div className="main-page">
             <div className="left">
-                <img src={LoginBg} className="bg-image" alt="image-bg" />
+                <img src={LoginBg} className="bg-image" alt="bg" />
             </div>
             <div className="right">
                 <p className="title">Login</p>

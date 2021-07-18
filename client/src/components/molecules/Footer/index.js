@@ -15,7 +15,7 @@ const Footer = () => {
         <div>
             <div className="footer">
                 <div>
-                    <img className="logo" src={Logo} />
+                    <img className="logo" src={Logo} alt="logo" />
                 </div>
                <div className="social-wrapper">
                    <Icon img={FacebookIc} />
