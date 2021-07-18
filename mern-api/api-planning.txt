@@ -1,0 +1,22 @@
+Standar API
+
+{root.api}/{version}/{grouping}/{endpoint}
+sample:
+http://mern-api.blog.com/v1/auth/login
+
+GROUP: Authentication
+
+[1] - Register
+req: 
+{
+    "name": "Testin
+}
+[2] - Login
+
+
+GROUP: BLOG
+
+[1] - Create Blog Post
+[2] - Get Blog Post
+[3] - Update Blog Post
+[4] - Delete Blog Post
