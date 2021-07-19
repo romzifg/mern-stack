@@ -13,8 +13,6 @@ const Home = () => {
     const {dataBlog, page} = useSelector(state => state.homeReducer);
     const dispatch = useDispatch(); 
 
-    console.log(page)
-
     useEffect(() => {
         dispatch(setDataBlog(counter))
     }, [counter, dispatch])
@@ -38,7 +36,6 @@ const Home = () => {
                 onClick: () => {
                     axios.delete(`http://localhost:4000/v1/blog/post/${id}`)
                     .then(res => {
-                        console.log(res)
                         dispatch(setDataBlog(counter))
                     })
                     .catch(err => {

@@ -5,8 +5,6 @@ export const setDataBlog = (page) => {
         axios.get(`http://localhost:4000/v1/blog/posts?page=${page}&perPage=2`)
         .then(result => {
             const responseApi = result.data;
-            console.log(responseApi)
-
             dispatch({ type: 'UPDATE_DATA_BLOG', payload: responseApi.data })
             dispatch({ 
                 type: 'UPDATE_PAGE', 
