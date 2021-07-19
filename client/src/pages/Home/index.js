@@ -4,6 +4,9 @@ import './home.scss'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setDataBlog } from '../../config/redux/action'
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import axios from 'axios'
 
 const Home = () => {
     const [counter, setCounter] = useState(1)
@@ -24,6 +27,32 @@ const Home = () => {
     const next = () => {
         setCounter(counter === page.totalPage ? page.totalPage : counter + 1)
     }
+
+    const confirmDelete = (id) => {
+        confirmAlert({
+            title: 'Confirm to Delete',
+            message: 'Yakin untuk Menghapus ?',
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => {
+                    axios.delete(`http://localhost:4000/v1/blog/post/${id}`)
+                    .then(res => {
+                        console.log(res)
+                        dispatch(setDataBlog(counter))
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                }
+              },
+              {
+                label: 'No',
+                onClick: () => console.log('Users Menolak')
+              }
+            ]
+          });
+    }
     
     return (
         <div className="home-wrapper">
@@ -37,10 +66,12 @@ const Home = () => {
                         <BlogItem 
                             key={blog._id} 
                             image={`http://localhost:4000/${blog.image}`} 
-                            itle={blog.title} 
+                            title={blog.title} 
                             body={blog.body} 
                             name={blog.author.name}
                             date={blog.createdAt}
+                            _id={blog._id}
+                            onDelete={confirmDelete}
                         />
                     )
                 })}

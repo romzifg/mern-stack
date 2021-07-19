@@ -1,19 +1,46 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {Button, Gap, Input, TextArea, Upload, Link} from '../../components'
 import './createBlog.scss'
-import { useHistory } from 'react-router-dom'
+import { useHistory, withRouter } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { setImgPreview, setForm, postToAPI } from '../../config/redux/action'
+import { setImgPreview, setForm, postToAPI, updateToAPI } from '../../config/redux/action'
+import axios from 'axios'
 
-const CreateBlog = () => {
+const CreateBlog = (props) => {
     const {form, imgPreview} = useSelector(state => state.createBlogReducer);
-    const {title, body, image} = form;
+    const {title, body} = form;
+    const [isUpdate, setIsUpdate] = useState(false);
     const dispatch = useDispatch();
-
     const history = useHistory();
 
-    const onSubmit = () => {   
-        postToAPI(form);
+    useEffect(() => {
+        console.log(props)
+        const id = props.match.params.id
+        if(id) {
+            setIsUpdate(true);
+            axios.get(`http://localhost:4000/v1/blog/post/${id}`)
+            .then(res => {
+                const data = res.data.data;
+                console.log(data);
+                dispatch(setForm('title', data.title));
+                dispatch(setForm('body', data.body));
+                dispatch(setImgPreview(`http://localhost:4000/${data.image}`));
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+    }, [props])
+
+    const onSubmit = () => {
+        const id = props.match.params.id;
+        if(isUpdate) {
+            console.log('Update Data')
+            updateToAPI(form, id)
+        } else {
+            console.log('Create Data')
+            postToAPI(form);
+        }
     }
 
     const onImageUpload = (e) => {
@@ -25,17 +52,17 @@ const CreateBlog = () => {
     return (
         <div className="blog-post">
             <Link title="kembali" onClick={() => history.push('/')}/>
-            <p className="title">Create Blog</p>
+            <p className="title">{isUpdate ? "Update" : "Create New"} Blog</p>
             <Input label="Post Title" value={title} onChange={(e) => dispatch(setForm('title', e.target.value))} />
             <Upload onChange={(e) => onImageUpload(e)} img={imgPreview}/>
             <TextArea value={body} onChange={(e) => dispatch(setForm('body', e.target.value))}/>
             <Gap height={20} />
             <div className="button-action">
-                <Button title="Save" onClick={onSubmit}/>
+                <Button title={isUpdate ?  "Update" : "Save"} onClick={onSubmit}/>
             </div>
             <Gap height={20} />
         </div>
     )
 }
 
-export default CreateBlog
+export default withRouter(CreateBlog);
